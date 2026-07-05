@@ -1,0 +1,110 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String             @id @default(cuid())
+  name             String
+  email            String             @unique
+  password         String
+  role             String             @default("Developer")
+  avatarUrl        String?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  notes            Note[]
+  snippets         Snippet[]
+  sqlQueries       SqlQuery[]
+  apiCollections   ApiCollection[]
+  resources        Resource[]
+  terminalCommands TerminalCommand[]
+}
+
+model Note {
+  id        String   @id @default(cuid())
+  title     String
+  content   String
+  favorite  Boolean  @default(false)
+  tags      String[] @default([])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Snippet {
+  id          String   @id @default(cuid())
+  title       String
+  code        String
+  language    String
+  description String
+  favorite    Boolean  @default(false)
+  tags        String[] @default([])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model SqlQuery {
+  id            String   @id @default(cuid())
+  title         String
+  query         String
+  databaseType  String
+  description   String
+  favorite      Boolean  @default(false)
+  tags          String[] @default([])
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model ApiCollection {
+  id              String   @id @default(cuid())
+  title           String
+  method          String
+  url             String
+  headers         Json     @default("{}")
+  body            String   @default("")
+  description     String   @default("")
+  responseExample String   @default("")
+  favorite        Boolean  @default(false)
+  tags            String[] @default([])
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Resource {
+  id          String   @id @default(cuid())
+  title       String
+  url         String
+  category    String
+  description String
+  favorite    Boolean  @default(false)
+  tags        String[] @default([])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model TerminalCommand {
+  id          String   @id @default(cuid())
+  title       String
+  command     String
+  description String
+  os          String
+  favorite    Boolean  @default(false)
+  tags        String[] @default([])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}

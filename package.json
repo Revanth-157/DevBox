@@ -1,0 +1,15 @@
+{
+  "name": "devbox",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "build": "npm run build -w client && npm run build -w server",
+    "dev": "npm run dev -w client",
+    "test": "npm run test -w client && npm run test -w server",
+    "test:client": "npm run test -w client",
+    "test:server": "npm run test -w server"
+  }
+}
